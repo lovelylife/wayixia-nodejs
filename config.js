@@ -1,10 +1,10 @@
 var config = {};
 
-config.port = process.env.WEB_PORT || 8080;
+config.port = process.env.WEB_PORT || 10086;
 
 config.api = {
-  check_wa_image:  'http://wayixia.com/index.php?mod=api&action=check-wa-image&inajax=true',
-  wa_image:  'http://wayixia.com/index.php?mod=api&action=wa-image&inajax=true',
+  check_wa_image:  'http://www.wayixia.com/index.php?mod=api&action=check-wa-image&inajax=true',
+  wa_image:  'http://www.wayixia.com/index.php?mod=api&action=wa-image&inajax=true',
 };
 
 config.server = {};
