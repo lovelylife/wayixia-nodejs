@@ -12,8 +12,13 @@ config.server.name = 's1.wayixia.com';
 //config.server.path = '../../../ii';
 //config.server.thumb_path = '../../../ii/thumb';
 
-config.server.path = 'D:/pictures/wayixia.com';
-config.server.thumb_path = 'D:/pictures/wayixia.com/thumb';
+//config.server.path = 'D:/pictures/wayixia.com';
+//config.server.thumb_path = 'D:/pictures/wayixia.com/thumb';
+
+config.server.path = 'z:/s1.wayixia.com';
+//config.server.thumb_path = 'Z:/s1.wayixia.com/thumb';
+
+
 
 module.exports = config;
 

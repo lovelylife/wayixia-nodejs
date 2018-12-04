@@ -304,7 +304,7 @@ var Q = {
       this.getimage(req, res);
       break;
     case '/merge':
-      //this.merge( req, res );
+      this.merge( req, res );
       break;
     default:
       echo(res, env.pathname + " is no supported");
