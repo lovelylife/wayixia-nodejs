@@ -66,6 +66,7 @@ function save_thumb(src, dest, src_width, src_height, dest_width) {
   // resize and remove EXIF profile data
   var width = dest_width;
   var height = (width * src_height) / src_width;
+  console.log( src + "\n" + dest );
   image_magick.resize({
     srcPath: src,
     dstPath: dest,
