@@ -57,7 +57,7 @@ function echo_json(res, header, data, extra) {
   object.header = header|| 0;
   object.data   = data || null;
   object.extra  = extra || null;
-  // buffer ÏÝÚå
+  // buffer ï¿½ï¿½ï¿½ï¿½
   var str = new Buffer(JSON.stringify(object));
   echo(res, str);
 }
@@ -307,6 +307,9 @@ var Q = {
     case '/merge':
       this.merge( req, res );
       break;
+    case '/payresult':
+      this.payresult( req, res );
+      break;
     default:
       echo(res, env.pathname + " is no supported");
     }
@@ -353,14 +356,77 @@ var Q = {
       }
     });
  },
+
+  payresult: function( req, res ) {
+   var ourl = url.parse(req.url);
+   const pathname = ourl.pathname;
+   //ourl.search
+   //var r = pathname.match( /\/[^\/]+/g );
+   var ws = this.wss[ourl.query];
+   if( ws ) {
+     ws.send("1");
+     echo_json(res, 0, null, null);
+   } else {
+     ws.send("0");
+     echo_json(res, -1, null, null);
+   }
+  },
+
+  addwss: function( k, ws ) {
+    if( this.wss[k] )
+    {
+      this.wss[k].close();
+    }
+
+    this.wss[k] = ws;
+  },
+
+  removewss: function( k ) {
+    if( this.wss[k] )
+    {
+      this.wss[k].close();
+    }
+    delete this.wss[k];
+  },
+  wss : {},
 };
+
+
+
+
+var WebSocketServer = require("ws").Server;
+var wss = new WebSocketServer({ noServer: true }); 
+wss.on("connection", function(ws, request) {
+  
+  var ourl = url.parse(request.url);
+  const pathname = ourl.pathname;
+  console.log( ourl ); 
+	ws.send("Welcome to " + ourl.query );
+  Q.addwss( ourl.query, ws ); 
+});
 
 
 var server = http.createServer(function(req, res) {   
   Q.dispatch( req, res );
 }).on( 'connection', function( socket ) {
   socket.setNoDelay( true );
-}).listen( config.port );
+}).on( 'upgrade', function( request, socket, head ) {
+  const pathname = url.parse(request.url).pathname;
+  if( pathname  === "/payment" ) {
+    wss.handleUpgrade(request, socket, head, function done(ws) {
+      wss.emit('connection', ws, request);
+    });
+  } else {
+    socket.destroy();
+  }
+});
+
+
+
+
+// Start Listen
+server.listen( config.port );
+
 
 console.log('Server is listening to http://localhost/ on port ' + config.port );
 
